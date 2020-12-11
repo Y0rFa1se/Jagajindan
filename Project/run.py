@@ -57,6 +57,7 @@ login()
 with open("elements/list.ini", "r", encoding="utf-8") as men_lists:
     lists = men_lists.readlines()
     for name in lists:
+        time.sleep(1)
         index = driver.find_element_by_xpath("//span[text()=' " + name.replace("\n", "") + " ']")
         index.click()
         time.sleep(1)
