@@ -5,24 +5,34 @@ import time
 driver = webdriver.Chrome("elements/cd/cd_87.0.4280.88.exe")
 driver.get("https://hcs.eduro.go.kr/#/loginWithUserInfo")
 
+with open("elements/mainElements.ini", "r", encoding="utf-8") as mElements:
+    cp_name = mElements.readline().replace("\n", "")
+    sc_level = mElements.readline().replace("\n", "")
+    sc_name = mElements.readline().replace("\n", "")
+    u_name = mElements.readline().replace("\n", "")
+    u_dob = mElements.readline().replace("\n", "")
+    u_pw = mElements.readline().replace("\n", "")
+    print(cp_name, sc_level, sc_name, u_name, u_dob, u_pw)
+
+
 def login():
     go = driver.find_element_by_id("btnConfirm2")
     go.click()
     time.sleep(1)
 
-    #find schoolName
+    #schoolName
     scName = driver.find_element_by_class_name("searchBtn")
     scName.click()
     time.sleep(1)
 
     scName = Select(driver.find_element_by_id("sidolabel"))
-    scName.select_by_value("01")
+    scName.select_by_visible_text(cp_name)
 
     scName = Select(driver.find_element_by_id("crseScCode"))
-    scName.select_by_value("4")
+    scName.select_by_visible_text(sc_level)
 
     scName = driver.find_element_by_id("orgname")
-    scName.send_keys("자운고등학교")
+    scName.send_keys(sc_name)
 
     scName = driver.find_element_by_class_name("searchBtn")
     scName.click()
@@ -30,7 +40,7 @@ def login():
     scName = driver.find_element_by_class_name("layerSchoolArea")
     scName.click()
 
-    scName = driver.find_element_by_xpath("//*[text() = '자운고등학교']")
+    scName = driver.find_element_by_xpath("//*[text() = '" + sc_name + "']")
     scName.click()
 
     scName = driver.find_element_by_class_name("layerFullBtn")
@@ -39,10 +49,10 @@ def login():
 
     #name/DoB
     id = driver.find_element_by_id("user_name_input")
-    id.send_keys("이은준")
+    id.send_keys(u_name)
 
     id = driver.find_element_by_id("birthday_input")
-    id.send_keys("030317")
+    id.send_keys(u_dob)
 
     go = driver.find_element_by_id("btnConfirm")
     go.click()
@@ -50,11 +60,10 @@ def login():
     #pw
     time.sleep(1)
     pw = driver.find_element_by_class_name("input_text_common")
-    pw.send_keys("6974")
+    pw.send_keys(u_pw)
 
     go = driver.find_element_by_id("btnConfirm")
     go.click()
-
 def survey(order):
     time.sleep(1)
     index = driver.find_element_by_xpath("//span[text()=' " + order + " ']")
