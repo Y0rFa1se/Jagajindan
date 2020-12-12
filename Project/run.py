@@ -8,10 +8,12 @@ driver.get("https://hcs.eduro.go.kr/#/loginWithUserInfo")
 def login():
     go = driver.find_element_by_id("btnConfirm2")
     go.click()
+    time.sleep(1)
 
     #find schoolName
     scName = driver.find_element_by_class_name("searchBtn")
     scName.click()
+    time.sleep(1)
 
     scName = Select(driver.find_element_by_id("sidolabel"))
     scName.select_by_value("01")
@@ -33,6 +35,7 @@ def login():
 
     scName = driver.find_element_by_class_name("layerFullBtn")
     scName.click()
+    time.sleep(1)
 
     #name/DoB
     id = driver.find_element_by_id("user_name_input")
@@ -45,30 +48,39 @@ def login():
     go.click()
 
     #pw
-    time.sleep(0.1)
+    time.sleep(1)
     pw = driver.find_element_by_class_name("input_text_common")
     pw.send_keys("6974")
 
     go = driver.find_element_by_id("btnConfirm")
     go.click()
 
+def survey(order):
+    time.sleep(1)
+    index = driver.find_element_by_xpath("//span[text()=' " + order + " ']")
+    index.click()
+    time.sleep(1)
+    surv = driver.find_element_by_id("survey_q1a1")
+    surv.click()
+    surv = driver.find_element_by_id("survey_q2a1")
+    surv.click()
+    surv = driver.find_element_by_id("survey_q3a1")
+    surv.click()
+    surv = driver.find_element_by_id("btnConfirm")
+    surv.click()
+    home = driver.find_element_by_xpath("//span[text()='처음으로']")
+    home.click()
+
 login()
 
 with open("elements/list.ini", "r", encoding="utf-8") as men_lists:
     lists = men_lists.readlines()
     for name in lists:
-        time.sleep(1)
-        index = driver.find_element_by_xpath("//span[text()=' " + name.replace("\n", "") + " ']")
-        index.click()
-        time.sleep(1)
-        surv = driver.find_element_by_id("survey_q1a1")
-        surv.click()
-        surv = driver.find_element_by_id("survey_q2a1")
-        surv.click()
-        surv = driver.find_element_by_id("survey_q3a1")
-        surv.click()
-        surv = driver.find_element_by_id("btnConfirm")
-        surv.click()
-        home = driver.find_element_by_xpath("//span[text()='처음으로']")
-        home.click()
-        time.sleep(1)
+        nameOrder = name.replace("\n", "")
+        try:
+            survey(nameOrder)
+            print("surveyed " + nameOrder)
+
+        except:
+            print("passed " + nameOrder)
+            pass
